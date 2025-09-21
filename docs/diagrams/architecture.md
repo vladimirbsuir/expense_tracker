@@ -4,16 +4,13 @@ graph TB
         U[Пользователь]
     end
 
-    %% ---------- Frontend ----------
     subgraph "🌐 Frontend"
         U --> |HTTPS| RA[React App<br/>]
         RA --> |REST API| GLB
     end
 
-    %% ---------- Gateway / LB ----------
     GLB[Nginx<br/>Load Balancer]
 
-    %% ---------- Backend ----------
     subgraph "⚙️ Spring-Boot Backend"
         GLB --> |/api/*| SB[Tomcat]
         SB --> AC[Analytics<br/>Controller]
@@ -24,7 +21,6 @@ graph TB
         SB --> CSVC[CSV<br/>Controller]
     end
 
-    %% ---------- Services ----------
     subgraph "🔧 Сервисный слой"
         AC --> AS[Analytics Service]
         BC --> BS[Budget Service]
@@ -36,7 +32,6 @@ graph TB
         RS --> SCH[Reminder Scheduler]
     end
 
-    %% ---------- Repositories ----------
     subgraph "🗃️ Доступ к данным"
         AS --> AR[(Analytics<br/>Repository)]
         BS --> BR[(Budget<br/>Repository)]
@@ -45,7 +40,6 @@ graph TB
         RS --> RER[(Reminder<br/>Repository)]
     end
 
-    %% ---------- База ----------
     subgraph "🐘 PostgreSQL"
         AR --> DB[(PostgreSQL)]
         BR --> DB
@@ -54,13 +48,11 @@ graph TB
         RER --> DB
     end
 
-    %% ---------- Внешние компоненты ----------
     subgraph "📦 Внешние ресурсы"
         CSV -.-> |export| CLD[(S3 / Local<br/>CSV Storage)]
         SCH -.-> |push/email| NT[Notification<br/>Service]
     end
 
-    %% ---------- Deployment ----------
     subgraph "🐳 Deployment"
         RA -.-> |build| STAT[Static Files<br/>CDN]
         SB -.-> |container| DOCK[Docker<br/>Image]
