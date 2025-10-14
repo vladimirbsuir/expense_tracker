@@ -13,10 +13,16 @@ const Expenses = () => {
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [editingExpense, setEditingExpense] = useState(null);
   const [editingCategory, setEditingCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [filteredExpenses, setFilteredExpenses] = useState([]);
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    handleCategoryFilter(selectedCategory);
+  }, [expenses, selectedCategory]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -26,7 +32,9 @@ const Expenses = () => {
         categoryAPI.getAll()
       ]);
       console.log('Expenses response:', expensesRes.data);
-      setExpenses(expensesRes.data.content || expensesRes.data || []);
+      const expenseData = expensesRes.data.content || expensesRes.data || [];
+      setExpenses(expenseData);
+      setFilteredExpenses(expenseData);
       setCategories(categoriesRes.data || []);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -80,6 +88,17 @@ const Expenses = () => {
     }
   };
 
+  const handleCategoryFilter = (categoryId) => {
+    setSelectedCategory(categoryId);
+    if (categoryId === '') {
+      setFilteredExpenses(expenses);
+    } else {
+      setFilteredExpenses(expenses.filter(expense => 
+        expense.category?.id?.toString() === categoryId
+      ));
+    }
+  };
+
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
@@ -109,6 +128,18 @@ const Expenses = () => {
         </div>
       </div>
 
+      <div className="category-filter">
+        <label>Filter by Category: </label>
+        <select value={selectedCategory} onChange={(e) => handleCategoryFilter(e.target.value)}>
+          <option value="">All Categories</option>
+          {categories.map(category => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <div className="expenses-table">
         <table>
           <thead>
@@ -122,13 +153,13 @@ const Expenses = () => {
             </tr>
           </thead>
           <tbody>
-            {expenses.map(expense => (
+            {filteredExpenses.map(expense => (
               <tr key={expense.id}>
-                <td>{expense.name}</td>
+                <td className="common">{expense.name}</td>
                 <td className="amount">${expense.amount?.toFixed(2)}</td>
-                <td>{expense.date}</td>
-                <td>{expense.category?.name || 'Uncategorized'}</td>
-                <td>{expense.description}</td>
+                <td className="common">{expense.date}</td>
+                <td className="common">{expense.category?.name || 'Uncategorized'}</td>
+                <td className="common">{expense.description}</td>
                 <td>
                   <div className="actions">
                     <button onClick={() => handleEdit(expense)} className="btn-edit">

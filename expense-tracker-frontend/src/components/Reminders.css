@@ -17,6 +17,11 @@
   overflow: hidden;
 }
 
+.reminders-table .common {
+  font-weight: 600;
+  color: black;
+}
+
 .reminders-table table {
   width: 100%;
   border-collapse: collapse;

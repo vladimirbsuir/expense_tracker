@@ -83,9 +83,9 @@ const Reminders = () => {
           <tbody>
             {reminders.map(reminder => (
               <tr key={reminder.id}>
-                <td>{reminder.title}</td>
-                <td>{reminder.message}</td>
-                <td>{reminder.dueDate}</td>
+                <td className="common">{reminder.title}</td>
+                <td className="common">{reminder.message}</td>
+                <td className="common">{reminder.dueDate}</td>
                 <td>
                   <span className={`reminder-type ${reminder.type?.toLowerCase()}`}>
                     {reminder.type}

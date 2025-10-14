@@ -15,11 +15,26 @@ const Messages = () => {
     setLoading(true);
     try {
       const today = new Date().toISOString().split('T')[0];
+      console.log('Fetching messages for date:', today);
       const response = await reminderAPI.getByDate(today, { page: 0, size: 100 });
       console.log('Today messages response:', response.data);
-      setMessages(response.data.content || response.data || []);
+      const messageData = response.data.content || response.data || [];
+      console.log('Processed message data:', messageData);
+      //setMessages(messageData.filter(msg => msg.active !== false));
+      setMessages(messageData);
     } catch (error) {
       console.error('Error fetching today messages:', error);
+      
+      try {
+        const fallbackResponse = await reminderAPI.getAll({ page: 0, size: 100 });
+        const allMessages = fallbackResponse.data.content || fallbackResponse.data || [];
+        const today = new Date().toISOString().split('T')[0];
+        setMessages(allMessages.filter(msg => 
+          msg.dueDate === today && msg.active !== false
+        ));
+      } catch (fallbackError) {
+        console.error('Fallback fetch also failed:', fallbackError);
+      }
     } finally {
       setLoading(false);
     }
