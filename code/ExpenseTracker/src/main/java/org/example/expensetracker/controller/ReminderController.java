@@ -40,6 +40,12 @@ public class ReminderController {
         return ResponseEntity.ok(reminderService.getRemindersByStatus(status, pageable));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ReminderResponse> updateReminderById(@PathVariable Long id,
+                                                               @RequestBody ReminderRequest request) {
+        return ResponseEntity.ok(reminderService.updateReminderById(id, request));
+    }
+
     @GetMapping("/by_activity")
     public ResponseEntity<Page<ReminderResponse>> getRemindersByActivity(@RequestParam("isActive") boolean isActive,
                                                                          Pageable pageable) {

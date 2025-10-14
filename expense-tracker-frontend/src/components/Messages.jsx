@@ -15,13 +15,9 @@ const Messages = () => {
     setLoading(true);
     try {
       const today = new Date().toISOString().split('T')[0];
-      console.log('Fetching messages for date:', today);
       const response = await reminderAPI.getByDate(today, { page: 0, size: 100 });
-      console.log('Today messages response:', response.data);
       const messageData = response.data.content || response.data || [];
-      console.log('Processed message data:', messageData);
-      //setMessages(messageData.filter(msg => msg.active !== false));
-      setMessages(messageData);
+      setMessages(messageData.filter(msg => msg.active !== false));
     } catch (error) {
       console.error('Error fetching today messages:', error);
       

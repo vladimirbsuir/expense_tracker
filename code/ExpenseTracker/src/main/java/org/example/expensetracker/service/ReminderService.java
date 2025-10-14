@@ -22,6 +22,7 @@ public class ReminderService {
 
     public ReminderResponse createReminder(ReminderRequest reminderRequest) {
         Reminder reminder = reminderMapper.toEntity(reminderRequest);
+        reminder.setActive(true);
         reminder = reminderRepository.save(reminder);
 
         return reminderMapper.toResponse(reminder);
@@ -46,6 +47,26 @@ public class ReminderService {
     public ReminderResponse getReminderById(Long id) {
         return reminderMapper.toResponse(reminderRepository.findById(id)
                 .orElseThrow(() -> new ReminderNotFoundException("Reminder not found")));
+    }
+
+    public ReminderResponse updateReminderById(Long id, ReminderRequest reminderRequest) {
+        Reminder reminder = reminderRepository.findById(id).orElseThrow(
+                () -> new ReminderNotFoundException("Reminder not found"));
+
+        if (reminderRequest.getType() != null) {
+            reminder.setType(reminderRequest.getType());
+        }
+        if (reminderRequest.getTitle() != null) {
+            reminder.setTitle(reminderRequest.getTitle());
+        }
+        if (reminderRequest.getMessage() != null) {
+            reminder.setMessage(reminderRequest.getMessage());
+        }
+        if (reminderRequest.getActive() != null) {
+            reminder.setActive(reminderRequest.getActive());
+        }
+
+        return reminderMapper.toResponse(reminderRepository.save(reminder));
     }
 
     public void deleteReminder(Long id) {

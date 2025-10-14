@@ -77,6 +77,7 @@ public class ExpenseService {
             Category category = categoryService.findCategoryById(expense.getCategory().getId());
             expenseToUpdate.setCategory(category);
         }
+        if (expense.getDate() != null) expenseToUpdate.setDate(expense.getDate());
 
         return expenseRepository.save(expenseToUpdate);
     }
