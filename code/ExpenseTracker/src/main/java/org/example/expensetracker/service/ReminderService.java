@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 @RequiredArgsConstructor
 public class ReminderService {
@@ -35,6 +37,10 @@ public class ReminderService {
 
     public Page<ReminderResponse> getRemindersByActivity(boolean isActive, Pageable pageable) {
         return reminderRepository.findByActive(isActive, pageable).map(reminderMapper::toResponse);
+    }
+
+    public Page<ReminderResponse> getRemindersByDate(LocalDate date, Pageable pageable) {
+        return reminderRepository.findByDate(date, pageable).map(reminderMapper::toResponse);
     }
 
     public ReminderResponse getReminderById(Long id) {

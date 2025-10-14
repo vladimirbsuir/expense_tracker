@@ -2,7 +2,6 @@ package org.example.expensetracker.repository;
 
 import org.example.expensetracker.dto.DailyExpenseDto;
 import org.example.expensetracker.dto.ExpenseReportDto;
-import org.example.expensetracker.dto.ExpenseResponse;
 import org.example.expensetracker.entity.Category;
 import org.example.expensetracker.entity.Expense;
 import org.example.expensetracker.entity.ExpenseType;

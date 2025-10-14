@@ -9,7 +9,9 @@ A React frontend for the ExpenseTracker Spring Boot application.
 - **Expense Management**: Add, edit, delete expenses
 - **Income Management**: Add, edit, delete income entries
 - **Data Import/Export**: CSV import and export functionality
-- **Messages**: View reminders and notifications
+- **Messages**: View today's reminders and notifications
+- **Reminders**: Full CRUD operations for reminders
+- **Category Management**: Add and manage expense/income categories
 - **Settings**: User profile information
 
 ## Prerequisites
@@ -42,9 +44,11 @@ Make sure your ExpenseTracker Spring Boot application is running on port 8080. T
 1. **Authentication**: Start by registering a new account or logging in with existing credentials
 2. **Summary**: View your financial overview with charts and top expenses
 3. **Expenses**: Manage your expense entries with full CRUD operations
-4. **Earnings**: Manage your income entries
-5. **Messages**: View budget warnings and reminders
-6. **Settings**: View your profile information
+4. **Earnings**: Manage your income entries  
+5. **Messages**: View today's reminders and notifications
+6. **Reminders**: Create, edit, and manage all reminders
+7. **Categories**: Manage expense and income categories
+8. **Settings**: View your profile information
 
 ## API Integration
 

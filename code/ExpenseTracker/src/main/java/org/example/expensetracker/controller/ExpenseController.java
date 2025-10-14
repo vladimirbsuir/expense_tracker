@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 
 @RestController
@@ -20,7 +19,7 @@ import java.time.LocalDate;
 public class ExpenseController {
     private final ExpenseService expenseService;
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Expense> createExpense(@RequestBody ExpenseRequest expense) {
         return new ResponseEntity<>(expenseService.createExpense(expense), HttpStatus.CREATED);
     }

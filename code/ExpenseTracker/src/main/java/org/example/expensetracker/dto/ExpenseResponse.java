@@ -2,6 +2,8 @@ package org.example.expensetracker.dto;
 
 import lombok.Data;
 import org.example.expensetracker.entity.Category;
+import org.example.expensetracker.entity.ExpenseType;
+
 import java.time.LocalDate;
 
 @Data
@@ -12,4 +14,5 @@ public class ExpenseResponse {
     private LocalDate date;
     private String description;
     private Category category;
+    private ExpenseType type;
 }

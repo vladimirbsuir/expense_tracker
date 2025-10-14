@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Plus, Download, Upload, Edit, Trash2 } from 'lucide-react';
+import { Plus, Download, Upload, Edit, Trash2, Tag } from 'lucide-react';
 import { expenseAPI, categoryAPI, csvAPI } from '../services/api';
 import ExpenseModal from './ExpenseModal';
+import CategoryModal from './CategoryModal';
 import './Expenses.css';
 
 const Expenses = () => {
@@ -9,7 +10,9 @@ const Expenses = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [editingExpense, setEditingExpense] = useState(null);
+  const [editingCategory, setEditingCategory] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -22,7 +25,8 @@ const Expenses = () => {
         expenseAPI.getByType('EXPENSE', { page: 0, size: 100 }),
         categoryAPI.getAll()
       ]);
-      setExpenses(expensesRes.data.content || []);
+      console.log('Expenses response:', expensesRes.data);
+      setExpenses(expensesRes.data.content || expensesRes.data || []);
       setCategories(categoriesRes.data || []);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -98,6 +102,10 @@ const Expenses = () => {
             Import
             <input type="file" accept=".csv" onChange={handleImport} style={{display: 'none'}} />
           </label>
+          <button onClick={() => setShowCategoryModal(true)} className="btn-secondary">
+            <Tag size={16} />
+            Categories
+          </button>
         </div>
       </div>
 
@@ -151,6 +159,21 @@ const Expenses = () => {
             setEditingExpense(null);
           }}
           type="EXPENSE"
+        />
+      )}
+      
+      {showCategoryModal && (
+        <CategoryModal
+          category={editingCategory}
+          onClose={() => {
+            setShowCategoryModal(false);
+            setEditingCategory(null);
+          }}
+          onSave={() => {
+            fetchData();
+            setShowCategoryModal(false);
+            setEditingCategory(null);
+          }}
         />
       )}
     </div>

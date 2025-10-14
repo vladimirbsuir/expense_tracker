@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Plus, Download, Upload, Edit, Trash2 } from 'lucide-react';
+import { Plus, Download, Upload, Edit, Trash2, Tag } from 'lucide-react';
 import { expenseAPI, categoryAPI, csvAPI } from '../services/api';
 import ExpenseModal from './ExpenseModal';
+import CategoryModal from './CategoryModal';
 import './Expenses.css';
 
 const Earnings = () => {
@@ -9,7 +10,9 @@ const Earnings = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [editingEarning, setEditingEarning] = useState(null);
+  const [editingCategory, setEditingCategory] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -19,10 +22,11 @@ const Earnings = () => {
     setLoading(true);
     try {
       const [earningsRes, categoriesRes] = await Promise.all([
-        expenseAPI.getByType('INCOME', { size: 100 }),
+        expenseAPI.getByType('INCOME', { page: 0, size: 100 }),
         categoryAPI.getAll()
       ]);
-      setEarnings(earningsRes.data.content || []);
+      console.log('Earnings response:', earningsRes.data);
+      setEarnings(earningsRes.data.content || earningsRes.data || []);
       setCategories(categoriesRes.data || []);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -98,6 +102,10 @@ const Earnings = () => {
             Import
             <input type="file" accept=".csv" onChange={handleImport} style={{display: 'none'}} />
           </label>
+          <button onClick={() => setShowCategoryModal(true)} className="btn-secondary">
+            <Tag size={16} />
+            Categories
+          </button>
         </div>
       </div>
 
@@ -151,6 +159,21 @@ const Earnings = () => {
             setEditingEarning(null);
           }}
           type="INCOME"
+        />
+      )}
+      
+      {showCategoryModal && (
+        <CategoryModal
+          category={editingCategory}
+          onClose={() => {
+            setShowCategoryModal(false);
+            setEditingCategory(null);
+          }}
+          onSave={() => {
+            fetchData();
+            setShowCategoryModal(false);
+            setEditingCategory(null);
+          }}
         />
       )}
     </div>

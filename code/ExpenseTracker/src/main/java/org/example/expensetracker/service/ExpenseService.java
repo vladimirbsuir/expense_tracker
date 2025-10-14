@@ -73,7 +73,10 @@ public class ExpenseService {
         if (expense.getName() != null) expenseToUpdate.setName(expense.getName());
         if (expense.getDescription() != null) expenseToUpdate.setDescription(expense.getDescription());
         if (expense.getAmount() != null) expenseToUpdate.setAmount(expense.getAmount());
-        if (expense.getCategory() != null) expenseToUpdate.setCategory(expense.getCategory());
+        if (expense.getCategory() != null) {
+            Category category = categoryService.findCategoryById(expense.getCategory().getId());
+            expenseToUpdate.setCategory(category);
+        }
 
         return expenseRepository.save(expenseToUpdate);
     }

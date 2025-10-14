@@ -4,20 +4,22 @@ import { reminderAPI } from '../services/api';
 import './Messages.css';
 
 const Messages = () => {
-  const [reminders, setReminders] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchReminders();
+    fetchTodayMessages();
   }, []);
 
-  const fetchReminders = async () => {
+  const fetchTodayMessages = async () => {
     setLoading(true);
     try {
-      const response = await reminderAPI.getAll({ size: 100 });
-      setReminders(response.data.content || []);
+      const today = new Date().toISOString().split('T')[0];
+      const response = await reminderAPI.getByDate(today, { page: 0, size: 100 });
+      console.log('Today messages response:', response.data);
+      setMessages(response.data.content || response.data || []);
     } catch (error) {
-      console.error('Error fetching reminders:', error);
+      console.error('Error fetching today messages:', error);
     } finally {
       setLoading(false);
     }
@@ -26,20 +28,9 @@ const Messages = () => {
   const handleDismiss = async (id) => {
     try {
       await reminderAPI.deactivate(id);
-      setReminders(reminders.filter(r => r.id !== id));
+      setMessages(messages.filter(r => r.id !== id));
     } catch (error) {
-      console.error('Error dismissing reminder:', error);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this reminder?')) {
-      try {
-        await reminderAPI.delete(id);
-        setReminders(reminders.filter(r => r.id !== id));
-      } catch (error) {
-        console.error('Error deleting reminder:', error);
-      }
+      console.error('Error dismissing message:', error);
     }
   };
 
@@ -51,46 +42,39 @@ const Messages = () => {
     <div className="messages">
       <h1>Messages & Notifications</h1>
       
-      {reminders.length === 0 ? (
+      {messages.length === 0 ? (
         <div className="no-messages">
           <Bell size={48} />
-          <p>No messages or notifications</p>
+          <p>No messages for today</p>
         </div>
       ) : (
         <div className="messages-list">
-          {reminders.map(reminder => (
-            <div key={reminder.id} className="message-card">
+          {messages.map(message => (
+            <div key={message.id} className="message-card">
               <div className="message-content">
                 <div className="message-header">
-                  <h3>{reminder.title}</h3>
-                  <span className={`message-type ${reminder.type?.toLowerCase()}`}>
-                    {reminder.type}
+                  <h3>{message.title}</h3>
+                  <span className={`message-type ${message.type?.toLowerCase()}`}>
+                    {message.type}
                   </span>
                 </div>
-                <p>{reminder.description}</p>
+                <p>{message.message}</p>
                 <div className="message-meta">
-                  <span>Due: {reminder.reminderDate}</span>
-                  <span>Created: {reminder.createdAt}</span>
+                  <span>Due: {message.dueDate}</span>
+                  <span>Status: {message.active ? 'Active' : 'Inactive'}</span>
                 </div>
               </div>
               <div className="message-actions">
                 <button 
-                  onClick={() => handleDismiss(reminder.id)}
+                  onClick={() => handleDismiss(message.id)}
                   className="btn-dismiss"
                   title="Dismiss"
                 >
                   Dismiss
                 </button>
-                <button 
-                  onClick={() => handleDelete(reminder.id)}
-                  className="btn-delete"
-                  title="Delete"
-                >
-                  <X size={16} />
-                </button>
               </div>
             </div>
-          ))}
+          )) }
         </div>
       )}
     </div>

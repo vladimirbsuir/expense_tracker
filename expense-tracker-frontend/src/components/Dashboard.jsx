@@ -4,6 +4,7 @@ import Summary from './Summary';
 import Expenses from './Expenses';
 import Earnings from './Earnings';
 import Messages from './Messages';
+import Reminders from './Reminders';
 import Settings from './Settings';
 import './Dashboard.css';
 
@@ -18,6 +19,7 @@ const Dashboard = ({ setIsAuthenticated }) => {
           <Route path="/expenses" element={<Expenses />} />
           <Route path="/earnings" element={<Earnings />} />
           <Route path="/messages" element={<Messages />} />
+          <Route path="/reminders" element={<Reminders />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </div>

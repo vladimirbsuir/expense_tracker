@@ -1,0 +1,95 @@
+.reminders-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.reminders-header h1 {
+  margin: 0;
+  color: #2c3e50;
+}
+
+.reminders-table {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.reminders-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.reminders-table th,
+.reminders-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.reminders-table th {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.reminder-type {
+  padding: 0.25rem 0.5rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.reminder-type.one_time {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.reminder-type.daily {
+  background: #d4edda;
+  color: #155724;
+}
+
+.reminder-type.weekly {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.reminder-type.monthly {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status.active {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status.inactive {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.btn-deactivate {
+  padding: 0.25rem;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.3s;
+  background: #17a2b8;
+  color: white;
+}
+
+.btn-deactivate:hover {
+  background: #138496;
+}
