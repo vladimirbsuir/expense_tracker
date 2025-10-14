@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { analyticsAPI } from '../services/api';
+import { analyticsAPI, budgetAPI } from '../services/api';
 import './Summary.css';
 
 const Summary = () => {
   const [balance, setBalance] = useState(0);
   const [dailyData, setDailyData] = useState([]);
   const [topExpenses, setTopExpenses] = useState([]);
+  const [budgets, setBudgets] = useState([]);
   const [period, setPeriod] = useState('7');
   const [loading, setLoading] = useState(true);
 
@@ -21,19 +22,21 @@ const Summary = () => {
       const startDate = new Date();
       startDate.setDate(endDate.getDate() - parseInt(period));
 
-      const [balanceRes, dailyRes, topRes] = await Promise.all([
+      const [balanceRes, dailyRes, topRes, budgetsRes] = await Promise.all([
         analyticsAPI.getBalance(),
         analyticsAPI.getDailyExpenses(
           startDate.toISOString().split('T')[0],
           endDate.toISOString().split('T')[0],
           { size: 100 }
         ),
-        analyticsAPI.getTopExpenses(5, { size: 5 })
+        analyticsAPI.getTopExpenses(5, { size: 5 }),
+        budgetAPI.getAll({ size: 100 })
       ]);
 
       setBalance(balanceRes.data);
       setDailyData(dailyRes.data.content || []);
       setTopExpenses(topRes.data.content || []);
+      setBudgets(budgetsRes.data.content || budgetsRes.data || []);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -56,7 +59,35 @@ const Summary = () => {
             ${balance?.toFixed(2) || '0.00'}
           </div>
         </div>
+        
+        <div className="card">
+          <h3>Active Budgets</h3>
+          <div className="budget-count">
+            {budgets.length}
+          </div>
+        </div>
       </div>
+      
+      {budgets.length > 0 && (
+        <div className="budgets-overview">
+          <h3>Budget Overview</h3>
+          <div className="budget-list">
+            {budgets.slice(0, 5).map(budget => (
+              <div key={budget.id} className="budget-item">
+                <span className="budget-category">
+                  {budget.category?.name || 'Unassigned'}
+                </span>
+                <span className="budget-amount">
+                  ${budget.amount?.toFixed(2)}
+                </span>
+                <span className="budget-period">
+                  {budget.period}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="charts-section">
         <div className="chart-controls">

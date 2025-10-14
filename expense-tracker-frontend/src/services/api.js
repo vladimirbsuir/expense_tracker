@@ -50,6 +50,15 @@ export const reminderAPI = {
   deactivate: (id) => api.put(`/reminders/deactivate/${id}`),
 };
 
+export const budgetAPI = {
+  getAll: (params) => api.get('/budgets', { params }),
+  getById: (id) => api.get(`/budgets/${id}`),
+  create: (budget) => api.post('/budgets', budget),
+  update: (id, budget) => api.put(`/budgets/${id}`, budget),
+  delete: (id) => api.delete(`/budgets/${id}`),
+  assignToCategory: (budgetId, categoryId) => api.put(`/budgets/${budgetId}/category/${categoryId}`),
+};
+
 export const csvAPI = {
   exportExpenses: () => api.get('/csv/export/expenses', { responseType: 'blob' }),
   importExpenses: (file) => {

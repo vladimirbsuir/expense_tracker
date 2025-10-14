@@ -1,18 +1,22 @@
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-import { categoryAPI } from '../services/api';
+import { categoryAPI, budgetAPI } from '../services/api';
 import './ExpenseModal.css';
 
 const CategoryModal = ({ category, onClose, onSave }) => {
   const [formData, setFormData] = useState({
-    name: ''
+    name: '',
+    budgetAmount: '',
+    budgetPeriod: new Date().toISOString().split('T')[0]
   });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (category) {
       setFormData({
-        name: category.name || ''
+        name: category.name || '',
+        budgetAmount: category.budget?.amount || '',
+        budgetPeriod: category.budget?.period || new Date().toISOString().split('T')[0]
       });
     }
   }, [category]);
@@ -22,10 +26,21 @@ const CategoryModal = ({ category, onClose, onSave }) => {
     setLoading(true);
 
     try {
+      let savedCategory;
       if (category) {
-        await categoryAPI.update(category.id, formData);
+        savedCategory = await categoryAPI.update(category.id, { name: formData.name });
       } else {
-        await categoryAPI.create(formData);
+        savedCategory = await categoryAPI.create({ name: formData.name });
+      }
+      
+      // Create budget if amount is provided
+      if (formData.budgetAmount) {
+        const budgetData = {
+          amount: parseFloat(formData.budgetAmount),
+          period: formData.budgetPeriod
+        };
+        const budgetResponse = await budgetAPI.create(budgetData);
+        await budgetAPI.assignToCategory(budgetResponse.data.id, savedCategory.data?.id || category.id);
       }
       
       onSave();
@@ -58,6 +73,28 @@ const CategoryModal = ({ category, onClose, onSave }) => {
               placeholder="Enter category name"
             />
           </div>
+
+          <div className="form-group">
+            <label>Budget Amount (Optional)</label>
+            <input
+              type="number"
+              step="0.01"
+              value={formData.budgetAmount}
+              onChange={(e) => setFormData({...formData, budgetAmount: e.target.value})}
+              placeholder="Enter budget amount"
+            />
+          </div>
+
+          {formData.budgetAmount && (
+            <div className="form-group">
+              <label>Budget Period</label>
+              <input
+                type="date"
+                value={formData.budgetPeriod}
+                onChange={(e) => setFormData({...formData, budgetPeriod: e.target.value})}
+              />
+            </div>
+          )}
 
           <div className="modal-actions">
             <button type="button" onClick={onClose} className="btn-secondary">

@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Home, DollarSign, TrendingUp, MessageSquare, Bell, Settings, LogOut } from 'lucide-react';
+import { Home, DollarSign, TrendingUp, MessageSquare, Bell, PiggyBank, Settings, LogOut } from 'lucide-react';
 import './Sidebar.css';
 
 const Sidebar = ({ setIsAuthenticated }) => {
@@ -42,6 +42,11 @@ const Sidebar = ({ setIsAuthenticated }) => {
         <NavLink to="/dashboard/reminders" className="nav-item">
           <Bell size={20} />
           <span>Reminders</span>
+        </NavLink>
+        
+        <NavLink to="/dashboard/budgets" className="nav-item">
+          <PiggyBank size={20} />
+          <span>Budgets</span>
         </NavLink>
         
         <NavLink to="/dashboard/settings" className="nav-item">

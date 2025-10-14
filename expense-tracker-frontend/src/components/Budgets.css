@@ -1,0 +1,41 @@
+.budgets-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.budgets-header h1 {
+  margin: 0;
+  color: #2c3e50;
+}
+
+.budgets-table {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.budgets-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.budgets-table th,
+.budgets-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.budgets-table th {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.budgets-table .amount {
+  font-weight: 600;
+  color: #27ae60;
+}
