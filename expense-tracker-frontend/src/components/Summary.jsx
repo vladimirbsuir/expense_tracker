@@ -7,7 +7,7 @@ const Summary = () => {
   const [balance, setBalance] = useState(0);
   const [dailyData, setDailyData] = useState([]);
   const [topExpenses, setTopExpenses] = useState([]);
-  const [period, setPeriod] = useState('7'); // days
+  const [period, setPeriod] = useState('7');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

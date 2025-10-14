@@ -45,6 +45,7 @@ export const reminderAPI = {
   getAll: (params) => api.get('/reminders', { params }),
   getByDate: (date, params) => api.get('/reminders/by_date', { params: { date, ...params } }),
   create: (reminder) => api.post('/reminders', reminder),
+  update: (id, reminder) => api.put(`/reminders/${id}`, reminder),
   delete: (id) => api.delete(`/reminders/${id}`),
   deactivate: (id) => api.put(`/reminders/deactivate/${id}`),
 };

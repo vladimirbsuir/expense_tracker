@@ -61,31 +61,41 @@ const Expenses = () => {
 
   const handleExport = async () => {
     try {
+      console.log('Exporting expenses...');
       const response = await csvAPI.exportExpenses();
-      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const url = window.URL.createObjectURL(new Blob([response.data], { type: 'text/csv' }));
       const link = document.createElement('a');
       link.href = url;
       link.setAttribute('download', 'expenses.csv');
       document.body.appendChild(link);
       link.click();
       link.remove();
+      window.URL.revokeObjectURL(url);
+      console.log('Export completed');
     } catch (error) {
       console.error('Error exporting expenses:', error);
+      alert('Export failed: ' + (error.response?.data?.message || error.message));
     }
   };
 
   const handleImport = async (event) => {
     const file = event.target.files[0];
     if (file) {
+      if (!file.name.endsWith('.csv')) {
+        alert('Please select a CSV file');
+        return;
+      }
       try {
+        console.log('Importing file:', file.name);
         await csvAPI.importExpenses(file);
         fetchData();
         alert('Import successful!');
       } catch (error) {
         console.error('Error importing expenses:', error);
-        alert('Import failed!');
+        alert('Import failed: ' + (error.response?.data?.message || error.message));
       }
     }
+    event.target.value = ''; // Reset file input
   };
 
   const handleCategoryFilter = (categoryId) => {

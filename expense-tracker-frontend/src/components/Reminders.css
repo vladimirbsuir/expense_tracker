@@ -98,3 +98,17 @@
 .btn-deactivate:hover {
   background: #138496;
 }
+
+.btn-activate {
+  padding: 0.25rem;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.3s;
+  background: #28a745;
+  color: white;
+}
+
+.btn-activate:hover {
+  background: #218838;
+}

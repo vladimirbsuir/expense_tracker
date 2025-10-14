@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Calendar } from 'lucide-react';
+import { Plus, Edit, Trash2, Calendar, Play } from 'lucide-react';
 import { reminderAPI } from '../services/api';
 import ReminderModal from './ReminderModal';
 import './Reminders.css';
@@ -54,6 +54,17 @@ const Reminders = () => {
     }
   };
 
+  const handleActivate = async (id) => {
+    try {
+      await reminderAPI.update(id, { active: true });
+      setReminders(reminders.map(r => 
+        r.id === id ? { ...r, active: true } : r
+      ));
+    } catch (error) {
+      console.error('Error activating reminder:', error);
+    }
+  };
+
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
@@ -101,9 +112,13 @@ const Reminders = () => {
                     <button onClick={() => handleEdit(reminder)} className="btn-edit">
                       <Edit size={14} />
                     </button>
-                    {reminder.active && (
+                    {reminder.active ? (
                       <button onClick={() => handleDeactivate(reminder.id)} className="btn-deactivate">
                         <Calendar size={14} />
+                      </button>
+                    ) : (
+                      <button onClick={() => handleActivate(reminder.id)} className="btn-activate">
+                        <Play size={14} />
                       </button>
                     )}
                     <button onClick={() => handleDelete(reminder.id)} className="btn-delete">

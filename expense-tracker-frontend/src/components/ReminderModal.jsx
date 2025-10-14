@@ -36,8 +36,7 @@ const ReminderModal = ({ reminder, onClose, onSave }) => {
 
     try {
       if (reminder) {
-        // Note: Update functionality would need to be added to backend
-        console.log('Update not implemented in backend');
+        await reminderAPI.update(reminder.id, formData);
       } else {
         await reminderAPI.create(formData);
       }
