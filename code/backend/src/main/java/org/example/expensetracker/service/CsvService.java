@@ -31,7 +31,7 @@ public class CsvService {
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try (CSVWriter writer = new CSVWriter(new OutputStreamWriter(outputStream))) {
-            writer.writeNext(new String[]{"Name","Amount", "Date", "Description", "Category", "Budget Amount"});
+            writer.writeNext(new String[]{"Name","Amount", "Date", "Description", "Category", "Type", "Budget Amount"});
 
             for (Expense expense : expenses) {
                 String budgetAmount = expense.getCategory() != null && expense.getCategory().getBudget() != null ? expense.getCategory().getBudget().getAmount().toString()
@@ -43,6 +43,7 @@ public class CsvService {
                         expense.getDate().toString(),
                         expense.getDescription(),
                         expense.getCategory() != null ? expense.getCategory().getName() : "",
+                        expense.getType() != null ? expense.getType().toString() : "EXPENSE",
                         budgetAmount});
             }
         } catch (IOException e) {
@@ -79,7 +80,8 @@ public class CsvService {
             expense.setAmount(Float.parseFloat(dto.getAmount()));
             expense.setDate(LocalDate.parse(dto.getDate()));
             expense.setDescription(dto.getDescription());
-            expense.setCategory(category);
+            expense.setCategoryId(category.getId());
+            expense.setType(org.example.expensetracker.entity.ExpenseType.valueOf(dto.getType()));
 
             expenseService.createExpense(expense);
         }
@@ -99,7 +101,8 @@ public class CsvService {
                 dto.setDate(nextLine[2]);
                 dto.setDescription(nextLine[3]);
                 dto.setCategoryName(nextLine[4]);
-                dto.setBudgetAmount(nextLine.length > 5 ? nextLine[5] : null);
+                dto.setType(nextLine.length > 5 ? nextLine[5] : "EXPENSE");
+                dto.setBudgetAmount(nextLine.length > 6 ? nextLine[6] : null);
                 expenses.add(dto);
             }
         }

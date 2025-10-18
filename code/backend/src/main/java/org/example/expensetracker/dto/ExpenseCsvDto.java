@@ -9,5 +9,6 @@ public class ExpenseCsvDto {
     private String categoryName;
     private String description;
     private String date;
+    private String type;
     private String budgetAmount;
 }

@@ -11,7 +11,6 @@ import org.example.expensetracker.mapper.ReminderMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 
 @Service
@@ -61,6 +60,9 @@ public class ReminderService {
         }
         if (reminderRequest.getMessage() != null) {
             reminder.setMessage(reminderRequest.getMessage());
+        }
+        if (reminderRequest.getDueDate() != null) {
+            reminder.setDate(reminderRequest.getDueDate());
         }
         if (reminderRequest.getActive() != null) {
             reminder.setActive(reminderRequest.getActive());

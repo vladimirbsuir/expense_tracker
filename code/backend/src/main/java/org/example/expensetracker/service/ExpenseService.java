@@ -25,14 +25,15 @@ public class ExpenseService {
 
     public Expense createExpense(ExpenseRequest expense) {
         if (expense.getDate() == null) expense.setDate(LocalDate.now());
-        if (expense.getCategory() != null) {
+        
+        Expense expenseToSave = expenseMapper.toEntity(expense);
+        
+        if (expense.getCategoryId() != null) {
             try {
-                Category category = categoryService.findCategoryByName(expense.getCategory().getName());
-                expense.setCategory(category);
+                Category category = categoryService.findCategoryById(expense.getCategoryId());
+                expenseToSave.setCategory(category);
             } catch (EntityNotFoundException ignored) {}
         }
-
-        Expense expenseToSave = expenseMapper.toEntity(expense);
 
         return expenseRepository.save(expenseToSave);
     }
@@ -73,8 +74,8 @@ public class ExpenseService {
         if (expense.getName() != null) expenseToUpdate.setName(expense.getName());
         if (expense.getDescription() != null) expenseToUpdate.setDescription(expense.getDescription());
         if (expense.getAmount() != null) expenseToUpdate.setAmount(expense.getAmount());
-        if (expense.getCategory() != null) {
-            Category category = categoryService.findCategoryById(expense.getCategory().getId());
+        if (expense.getCategoryId() != null) {
+            Category category = categoryService.findCategoryById(expense.getCategoryId());
             expenseToUpdate.setCategory(category);
         }
         if (expense.getDate() != null) expenseToUpdate.setDate(expense.getDate());

@@ -12,6 +12,6 @@ public class ExpenseRequest {
     private Float amount;
     private LocalDate date;
     private String description;
-    private Category category;
+    private Long categoryId;
     private ExpenseType type;
 }

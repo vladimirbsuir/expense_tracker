@@ -11,6 +11,7 @@ import org.mapstruct.MappingConstants;
 public interface ReminderMapper {
 
     @Mapping(source = "dueDate", target = "date")
+    @Mapping(target = "active", defaultValue = "true")
     Reminder toEntity(ReminderRequest reminderRequest);
 
     @Mapping(source = "date", target = "dueDate")
