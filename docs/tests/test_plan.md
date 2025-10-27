@@ -120,7 +120,7 @@
 
 ## Представление результатов
 
-Результаты представлены  в документе ["Результаты тестирования"](https://github.com/vladimirbsuir/expense_tracker/docs/tests/test_results.md).
+Результаты представлены  в документе ["Результаты тестирования"](test_results.md).
 
 <a name="conclusion"></a>
 
